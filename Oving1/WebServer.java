@@ -29,7 +29,6 @@ public class WebServer {
          outputString += "</ul>\n<body><html>";
          pw.println(outputString);
          pw.flush();
-         System.out.println("Etter print");
       } catch (IOException ioe) {
          System.out.println("Server could not be initialized:\nError message:\n" + ioe.getMessage());
       }
