@@ -1,0 +1,6 @@
+*.docx
+*.class
+*.jar
+ExtraCode
+ExtraCode/*
+*.pcapng
