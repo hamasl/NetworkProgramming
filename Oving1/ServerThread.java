@@ -19,7 +19,7 @@ public class ServerThread extends Thread {
          pw.println("Connection with server at address: " + SOCKET.getLocalAddress().toString() + " has been made.");
 
          String input = "";
-         while (!"e".equals(input)) {
+         while (!"e".equals(input.trim())) {
             pw.println("Enter a math equation to be solved:");
             pw.flush();
             input = br.readLine();
