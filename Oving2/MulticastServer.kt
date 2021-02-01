@@ -10,7 +10,7 @@ fun main(){
    
    var keepGoing: Boolean = true
    while(keepGoing){
-      print("\nEnter a message to be multicasted (Exit to quit multicasting): ")
+      print("Enter a message to be multicasted (Exit to quit multicasting): ")
       val message:String = readLine()!!
       if("Exit".equals(message.trim())) keepGoing = false
       val buffer: ByteArray = message.toByteArray()

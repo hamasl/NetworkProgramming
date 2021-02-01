@@ -4,10 +4,13 @@ import java.net.InetAddress
 
 fun main(){
    val port:Int = 5664
+   val ip: String = "224.224.224.224"
    val socket: MulticastSocket = MulticastSocket(port)
-   val group: InetAddress = InetAddress.getByName("224.224.224.224")
+   val group: InetAddress = InetAddress.getByName(ip)
    socket.joinGroup(group)
    var keepGoing: Boolean = true
+
+   println("Joined group on ip-address: $ip and port $port")
 
    while(keepGoing){
       val buffer: ByteArray = ByteArray(400)
