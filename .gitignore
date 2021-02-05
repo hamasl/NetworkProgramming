@@ -5,3 +5,5 @@ ExtraCode
 ExtraCode/*
 *.pcapng
 .DS_Store
+*.pdf
+*txt

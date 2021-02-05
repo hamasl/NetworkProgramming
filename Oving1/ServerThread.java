@@ -19,24 +19,26 @@ public class ServerThread extends Thread {
          pw.println("Connection with server at address: " + SOCKET.getLocalAddress().toString() + " has been made.");
 
          String input = "";
-         while (!"e".equals(input.trim())) {
+         while (input != null && !"e".equals(input.trim())) {
             pw.println("Enter a math equation to be solved:");
             pw.flush();
             input = br.readLine();
-            String[] splitInput = input.split(" ");
-            char operation = splitInput[1].charAt(0);
-            String answer;
-            if (operation == '+') {
-               answer = splitInput[0] + " + " + splitInput[2] + " = "
-                     + (Double.parseDouble(splitInput[0]) + Double.parseDouble(splitInput[2]));
-            } else if (operation == '-') {
-               answer = splitInput[0] + " - " + splitInput[2] + " = "
-                     + (Double.parseDouble(splitInput[0]) - Double.parseDouble(splitInput[2]));
-            } else
-               answer = "Operation has to be + or -";
-            pw.println(answer);
-            pw.flush();
-            input = br.readLine();
+            if (input != null) {
+               String[] splitInput = input.split(" ");
+               char operation = splitInput[1].charAt(0);
+               String answer;
+               if (operation == '+') {
+                  answer = splitInput[0] + " + " + splitInput[2] + " = "
+                        + (Double.parseDouble(splitInput[0]) + Double.parseDouble(splitInput[2]));
+               } else if (operation == '-') {
+                  answer = splitInput[0] + " - " + splitInput[2] + " = "
+                        + (Double.parseDouble(splitInput[0]) - Double.parseDouble(splitInput[2]));
+               } else
+                  answer = "Operation has to be + or -";
+               pw.println(answer);
+               pw.flush();
+               input = br.readLine();
+            }
          }
       } catch (IOException ioe) {
          System.out.println("An IOException with message: " + ioe.getMessage() + " occured.");
