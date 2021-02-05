@@ -7,3 +7,5 @@ ExtraCode/*
 .DS_Store
 *.pdf
 *txt
+*.exe
+*.out
