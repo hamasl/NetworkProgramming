@@ -9,3 +9,6 @@ ExtraCode/*
 *txt
 *.exe
 *.out
+.vscode
+*.json
+Oving3/CalcPrimes
