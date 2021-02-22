@@ -8,22 +8,27 @@
 
 using namespace std;
 
-bool isPrime(int number){
-    if (number == 2) return true;
-    if (number <= 1 || number % 2 == 0) return false;
+bool isPrime(int number)
+{
+    if (number == 2)
+        return true;
+    if (number <= 1 || number % 2 == 0)
+        return false;
     int squareRoot = (int)sqrt(number);
     //Adding two to avoid all even numbers since they are divisible by two anyways
     //Only going to square root of number since any higher factor, would need to be multiplied by a lesser factor, and would therefore have already been found
-    for (int i = 3; i <= squareRoot; i+= 2){
-        if(number % i == 0) return false;
+    for (int i = 3; i <= squareRoot; i += 2)
+    {
+        if (number % i == 0)
+            return false;
     }
     return true;
 }
 
+int main()
+{
 
-int main(){
-
-    int min,max, numberOfThreads;
+    int min, max, numberOfThreads;
     cout << "Enter the smallest number to be searched from: ";
     cin >> min;
     cout << "Enter the largest number to be searched to: ";
@@ -32,38 +37,58 @@ int main(){
     cin >> numberOfThreads;
     cout << endl;
 
+    if (numberOfThreads <= 0)
+    {
+        cout << "Non valid number of threads entered" << endl;
+        return 1;
+    }
+    if (max < 2)
+    {
+        cout << "No primes in this range" << endl;
+        return 1;
+    }
+
     mutex primeMutex;
     vector<int> primeNums;
 
     vector<thread> threads;
 
-    //No primes less than 2 therefore only searching from two and uppwards
+    //No primes less than 2 therefore only searching from two and upwards
     int threadMin = (min < 2) ? 2 : min;
-    int step = (max-threadMin)/numberOfThreads;
-    int threadMax = step+threadMin;
-    for (int i = 0; i < numberOfThreads; i++) {
+    int step = (max - threadMin) / numberOfThreads;
+    int threadMax = step + threadMin;
+
+    //Else an edge case will be lost
+    if (numberOfThreads == 1)
+        threadMax++;
+    for (int i = 0; i < numberOfThreads; i++)
+    {
         //Not passing in &threadMin and &threadMax, since we want every thread to have its own copy
-        threads.emplace_back(thread([threadMin, threadMax, &primeMutex, &primeNums]{
+        threads.emplace_back(thread([threadMin, threadMax, &primeMutex, &primeNums] {
             //Incrementing like that to force j to skip every even number except two
-            for (int j = threadMin; j < threadMax; (j%2 == 0 || j == 1)?++j:j+=2) {
-                if (isPrime(j)){
+            for (int j = threadMin; j < threadMax; (j % 2 == 0 || j == 1) ? ++j : j += 2)
+            {
+                if (isPrime(j))
+                {
                     unique_lock<mutex> lock(primeMutex);
                     primeNums.emplace_back(j);
                 }
             }
         }));
         threadMin = threadMax;
-        threadMax = (i == numberOfThreads -2) ? (max+1) : threadMax+step;
+        threadMax = (i == numberOfThreads - 2) ? (max + 1) : threadMax + step;
     }
 
-    for (int i = 0; i < numberOfThreads; ++i) {
+    for (int i = 0; i < numberOfThreads; ++i)
+    {
         threads[i].join();
     }
     threads.clear();
 
     sort(primeNums.begin(), primeNums.end());
 
-    for (int i = 0; i < primeNums.size(); ++i) {
+    for (int i = 0; i < primeNums.size(); ++i)
+    {
         cout << primeNums[i] << "\n";
     }
     cout << endl;
@@ -71,4 +96,3 @@ int main(){
 
     return 0;
 }
-

@@ -27,7 +27,7 @@ public class UdpClient {
             System.out.println("Enter the second number:");
             double num2 = scanner.nextDouble();
             scanner.nextLine();
-            String message = num1 + " " + operation + " " + num2;
+            String message = num1 + " " + operation + " " + num2 + "\n";
 
             byte[] buffer = message.getBytes();
 
@@ -42,7 +42,7 @@ public class UdpClient {
             String answer = scanner.nextLine();
             if (answer.length() != 1 || answer.charAt(0) != 'Y') {
                keepGoing = false;
-               buffer = "e".getBytes();
+               buffer = "e\n".getBytes();
                packet = new DatagramPacket(buffer, buffer.length, address, SERVER_PORT);
                ds.send(packet);
             }

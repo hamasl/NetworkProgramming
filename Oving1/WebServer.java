@@ -26,7 +26,7 @@ public class WebServer {
          String[] splitInput = input.split("\n");
          for (String string : splitInput)
             outputString += "<li>" + string + "</li>\n";
-         outputString += "</ul>\n<body><html>";
+         outputString += "</ul>\n</body></html>";
          pw.println(outputString);
          pw.flush();
       } catch (IOException ioe) {

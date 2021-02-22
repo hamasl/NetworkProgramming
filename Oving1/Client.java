@@ -8,7 +8,7 @@ import java.util.Scanner;
 
 public class Client {
    public static void main(String[] args) {
-      final int PORT = 6000;
+      final int PORT = 42343;
       boolean keepGoing = true;
       Scanner scanner = new Scanner(System.in);
 

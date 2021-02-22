@@ -3,7 +3,7 @@ import java.net.ServerSocket;
 import java.util.Scanner;
 
 public class MultiThreadServer {
-   private static final int PORT = 6000;
+   private static final int PORT = 42343;
 
    public static void main(String[] args) {
       Scanner s = new Scanner(System.in);

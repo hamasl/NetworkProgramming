@@ -15,7 +15,6 @@ public class UdpServer {
             System.out.println("Waiting for UDP packet...");
             byte[] buffer = new byte[300];
             DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
-            ds.setReceiveBufferSize(300);
             ds.receive(packet);
             System.out.println("UDP packet recieved");
             String equation = new String(buffer);
@@ -27,14 +26,15 @@ public class UdpServer {
                String[] splitInput = equation.split(" ");
                char operand = splitInput[1].charAt(0);
                if (operand == '+') {
-                  answer = splitInput[0] + " + " + splitInput[2] + " = "
+                  answer = splitInput[0].trim() + " + " + splitInput[2].trim() + " = "
                         + (Double.parseDouble(splitInput[0]) + Double.parseDouble(splitInput[2]));
                } else if (operand == '-') {
-                  answer = splitInput[0] + " - " + splitInput[2] + " = "
+                  answer = splitInput[0].trim() + " - " + splitInput[2].trim() + " = "
                         + (Double.parseDouble(splitInput[0]) - Double.parseDouble(splitInput[2]));
                } else {
                   answer = "Operand has to be either + or -";
                }
+               answer += "\n";
                InetAddress address = packet.getAddress();
                int port = packet.getPort();
                buffer = answer.getBytes();
