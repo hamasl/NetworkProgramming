@@ -9,7 +9,8 @@
 
 using namespace std;
 
-class Workers {
+class Workers
+{
 private:
     int n;
     list<function<void()>> tasks;
@@ -22,43 +23,50 @@ private:
     atomic<long> tasksToBeDone;
 
 public:
-    Workers(int numberOfThreads) {
+    Workers(int numberOfThreads)
+    {
         n = numberOfThreads;
     }
 
-    void start() {
+    void start()
+    {
         tasksToBeDone.operator=(0);
         keepGoing.operator=(true);
-        for (int i = 0; i < n; ++i) {
+        for (int i = 0; i < n; ++i)
+        {
             threads.emplace_back([this] {
-                while (keepGoing) {
+                while (keepGoing)
+                {
                     function<void()> task;
                     {
                         unique_lock<mutex> lock(this->tasksLock);
-                        while (tasks.empty() && keepGoing) cv.wait(lock);
-                        if (keepGoing) {
+                        while (tasks.empty() && keepGoing)
+                            cv.wait(lock);
+                        if (keepGoing)
+                        {
                             task = *tasks.begin();
                             tasks.pop_front();
                             tasksToBeDone.operator--();
                         }
                     }
-                    if (task) task();
+                    if (task)
+                        task();
                 }
             });
         }
     }
 
-    void post(function<void()> task) {
+    void post(function<void()> task)
+    {
         tasksToBeDone.operator++();
-        //cout << tasksToBeDone << endl;
         unique_lock<mutex>(this->tasksLock);
         tasks.emplace_back(task);
         cv.notify_one();
     }
 
-    void post_timeout(function<void()> task, long milliseconds) {
+    void post_timeout(function<void()> task, long milliseconds)
+    {
         tasksToBeDone.operator++();
-        //cout << tasksToBeDone << endl;
         //Not using mutex lock on threads vector since this method is only supposed to be called from the main method
         threads.emplace_back([this, task, milliseconds] {
             //TODO må kanskje sette låsen før sleep_for fordi nå stanses all gjennomføring når tasken har blitt lagt bakerst
@@ -69,39 +77,42 @@ public:
         });
     }
 
-
-    void stop() {
-        threads.emplace_back([this]{
-            while (keepGoing){
-                //cout << tasksToBeDone << endl;
+    void stop()
+    {
+        threads.emplace_back([this] {
+            while (keepGoing)
+            {
                 unique_lock<mutex>(this->tasksLock);
-                if (tasks.empty() && tasksToBeDone == 0) {
+                if (tasks.empty() && tasksToBeDone == 0)
+                {
                     keepGoing.operator=(false);
                     cv.notify_all();
                 }
-                else cv.notify_one();
+                else
+                    cv.notify_one();
             }
         });
-
     }
 
-    void join() {
+    void join()
+    {
         //Using threads.size() since post_timeout adds a new thread to the vector
-        for (int i = 0; i < threads.size(); ++i) {
+        for (int i = 0; i < threads.size(); ++i)
+        {
             threads[i].join();
-            //cout << this << "   -   "<< i << endl;
         }
     }
 
-    ~Workers() {
+    ~Workers()
+    {
         unique_lock<mutex>(this->tasksLock);
         tasks.clear();
         threads.clear();
     }
 };
 
-
-int main() {
+int main()
+{
     //Printing out WT for Worker Threads and EV for Event loop
 
     Workers worker_threads(4);
@@ -112,8 +123,8 @@ int main() {
 
     worker_threads.post_timeout([] {
         cout << "WT Delayed Task A 5000ms" << endl;
-    }, 5000);
-
+    },
+                                5000);
 
     worker_threads.post([] {
         cout << "WT Task B" << endl;
@@ -123,13 +134,15 @@ int main() {
         cout << "WT Task C" << endl;
     });
 
-    event_loop.post_timeout([]{
+    event_loop.post_timeout([] {
         cout << "EV delayed Task D 2000ms" << endl;
-    }, 2000);
+    },
+                            2000);
 
-    event_loop.post_timeout([]{
+    event_loop.post_timeout([] {
         cout << "EV delayed Task E 1000ms" << endl;
-    }, 1000);
+    },
+                            1000);
 
     event_loop.post([] {
         cout << "EV Task F" << endl;
@@ -138,9 +151,6 @@ int main() {
     event_loop.post([] {
         cout << "EV Task G" << endl;
     });
-
-
-    //this_thread::sleep_for(chrono::milliseconds(10000));
 
     worker_threads.stop();
     event_loop.stop();
