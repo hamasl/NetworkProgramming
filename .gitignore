@@ -1,8 +1,8 @@
 *.docx
 *.class
 *.jar
-ExtraCode
-ExtraCode/*
+Oving2/Extra code
+Oving2/Extra code/*
 *.pcapng
 .DS_Store
 *.pdf
@@ -12,3 +12,7 @@ ExtraCode/*
 .vscode
 *.json
 Oving3/CalcPrimes
+Oving2/Extra code/JavaSSLServer.class
+.gitignore
+Oving2/Extra code/JavaSSLClient.class
+Oving4/Workers
