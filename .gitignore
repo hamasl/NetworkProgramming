@@ -10,9 +10,9 @@ Oving2/Extra code/*
 *.exe
 *.out
 .vscode
-*.json
 Oving3/CalcPrimes
 Oving2/Extra code/JavaSSLServer.class
 .gitignore
 Oving2/Extra code/JavaSSLClient.class
 Oving4/Workers
+node_modules
