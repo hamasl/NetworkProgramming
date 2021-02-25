@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+   <meta charset="UTF-8">
+   <meta http-equiv="X-UA-Compatible" content="IE=edge">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Code compiler</title>
+</head>
+
+<body>
+   <h1>Compile your C++ code:</h1>
+   <div id="main">
+      <form id="code">
+         <textarea id="txt">
+//Example code
+#include <iostream>
+int main() {
+   std::cout << "Hello World" << std::endl;
+}</textarea>
+         <div id="output">
+            <p id="output-text">Code will be compiled here</p>
+         </div>
+         <button>Compile</button>
+
+      </form>
+
+   </div>
+</body>
+
+<style type="text/css">
+   * {
+      font-family: Helvetica, sans-serif;
+   }
+
+   body {
+      background-color: #212120;
+   }
+
+   #txt {
+      width: 100%;
+      background-color: black;
+      color: lightblue;
+      font-size: 20px;
+      height: 800px;
+      resize: none;
+      border: none;
+      padding: 10px;
+      box-sizing: border-box;
+      grid-area: txt;
+      overflow: scroll;
+      margin: auto;
+   }
+
+
+   button:hover {
+      background-color: gray;
+      color: black;
+   }
+
+   h1 {
+      text-align: center;
+   }
+
+   form {
+      box-sizing: border-box;
+      width: 100%;
+      display: grid;
+      grid-template-areas: "txt output"
+         "btn btn";
+      grid-template-columns: 48% 48%;
+      gap: 2%;
+   }
+
+   #output {
+      background-color: black;
+      width: 100%;
+      float: left;
+      height: 800px;
+      color: lightblue;
+      font-size: 20px;
+      overflow: scroll;
+      grid-area: output;
+      padding: 10px;
+      box-sizing: border-box;
+      margin: auto;
+   }
+
+
+   button {
+      display: block;
+      font-size: 20px;
+      width: 100%;
+      background-color: black;
+      color: white;
+      border: none;
+      padding: 10px;
+      grid-area: btn;
+   }
+
+   p {
+      margin: 0px;
+   }
+
+   #main {
+      width: 90%;
+      margin: auto;
+   }
+
+   @media only screen and (max-width:800px) {
+      form {
+         grid-template-areas: "txt""btn""output";
+         grid-template-columns: 100%;
+         gap: 1%;
+      }
+
+   }
+</style>
+
+<script type="text/javascript">
+   const SERVER_PORT = 8080
+   const SERVER_ADDRESS = "localhost"
+
+
+   const textArea = document.querySelector("#txt")
+
+   const printRes = (input = "") => {
+      document.querySelector("#output-text").innerText = input
+   }
+
+   document.querySelector("#code").addEventListener("submit", (e) => {
+      e.preventDefault()
+      printRes("Submiting code to server...")
+      fetch(`http://${SERVER_ADDRESS}:${SERVER_PORT}/codeCompiler/`, {
+         method: "POST",
+         headers: {
+            "Content-Type": "application/json"
+         },
+         body: JSON.stringify({
+            code: textArea.value
+         })
+      }).then(res => {
+         return res.json()
+      }).then(data => {
+         printRes("Code output:\n" + data.code + "\n\nCompilitation of code from docker:\n" + data.docker)
+      }).catch(error => {
+         printRes(`Error occured: ${error}`)
+      })
+   })
+
+</script>
+
+</html>
