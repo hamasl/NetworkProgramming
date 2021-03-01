@@ -36,8 +36,8 @@ app.post("/", (req, res) => {
             console.log("Docker container run.\nSending compiled code")
 
             console.log("err:\n" + err);
-            console.log("\n\n\nstdout:" + stdout);
-            console.log("stderr:\n" + stderr);
+            console.log("\n\n\nstdout:\n" + stdout);
+            console.log("\n\n\nstderr:\n" + stderr);
 
 
             let compileError = ""
@@ -48,9 +48,6 @@ app.post("/", (req, res) => {
                   compileError += line + "\n"
                }
             });
-
-            console.log(splitError);
-            console.log(compileError);
 
             res.status(200)
             res.contentType("application/json")
