@@ -67,9 +67,8 @@ public:
     void post_timeout(function<void()> task, long milliseconds)
     {
         tasksToBeDone.operator++();
-        //Not using mutex lock on threads vector since this method is only supposed to be called from the main method
+        //Not using mutex lock on threads vector since this method is only supposed to be called from the singlethreaded main method
         threads.emplace_back([this, task, milliseconds] {
-            //TODO må kanskje sette låsen før sleep_for fordi nå stanses all gjennomføring når tasken har blitt lagt bakerst
             this_thread::sleep_for(chrono::milliseconds(milliseconds));
             unique_lock<mutex>(this->tasksLock);
             tasks.emplace_back(task);

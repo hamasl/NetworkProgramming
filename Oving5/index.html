@@ -84,6 +84,7 @@ int main() {
       padding: 10px;
       box-sizing: border-box;
       margin: auto;
+      white-space: pre-wrap;
    }
 
 
@@ -131,7 +132,7 @@ int main() {
    document.querySelector("#code").addEventListener("submit", (e) => {
       e.preventDefault()
       printRes("Submiting code to server...")
-      fetch(`http://${SERVER_ADDRESS}:${SERVER_PORT}/codeCompiler/`, {
+      fetch(`http://${SERVER_ADDRESS}:${SERVER_PORT}/`, {
          method: "POST",
          headers: {
             "Content-Type": "application/json"
@@ -142,7 +143,10 @@ int main() {
       }).then(res => {
          return res.json()
       }).then(data => {
-         printRes("Code output:\n" + data.code + "\n\nCompilitation of code from docker:\n" + data.docker)
+         console.log(data.error);
+         const errors = (data.error.length == 0) ? "None! Good job!" : data.error
+         console.log(errors);
+         printRes("Code output:\n" + data.code + "\n\nErrors:\n" + errors)
       }).catch(error => {
          printRes(`Error occured: ${error}`)
       })
