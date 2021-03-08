@@ -12,7 +12,6 @@ Oving2/Extra code/*
 .vscode
 Oving3/CalcPrimes
 Oving2/Extra code/JavaSSLServer.class
-.gitignore
 Oving2/Extra code/JavaSSLClient.class
 Oving4/Workers
-Oving5/node_modules/*
+Oving*/node_modules/*

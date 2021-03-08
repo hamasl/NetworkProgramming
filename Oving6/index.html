@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+   <meta charset="UTF-8" />
+</head>
+
+<body>
+   <div id="innerBody">
+      <div id="grid">
+         <h1>Online small talk</h1>
+         <!--Have to add scroll wrapper to keep messages from newest to oldest, but also appear at the bottom om the screen-->
+         <div id="scroll-wrapper">
+            <div id="input"></div>
+         </div>
+         <input id="output" type="text">
+         <button id="send">Send message</button>
+      </div>
+   </div>
+
+   <script>
+      const input = document.querySelector("#input")
+      const output = document.querySelector("#output")
+      const send = document.querySelector("#send")
+
+      let ws = new WebSocket('ws://localhost:3001');
+      ws.onmessage = (event) => {
+         input.innerHTML += `\<p\>${event.data}\</p\>`
+      }
+      ws.onopen = () => {
+         console.log("Connection opened");
+      }
+
+      ws.onclose = () => {
+         console.log("Connection closed");
+      }
+
+      send.addEventListener("click", () => {
+         if (output.value.trim() == "") alert("Message has to have content")
+         else if (Buffer.byteLength(output.value) > 65535) alert("Messages over 64kB are not supported yet")
+         else ws.send(output.value)
+
+         output.value = ""
+      })
+   </script>
+
+   <style>
+      body {
+         background-color: lightgray;
+      }
+
+      #innerBody {
+         width: 90%;
+         margin: auto;
+         background-color: black;
+         opacity: 0.8;
+         height: 95vh;
+      }
+
+      #grid {
+         padding: 20px;
+         margin: auto;
+         grid-template-areas: "h1""scroll-wrapper""output""send";
+         gap: 2%;
+         width: 80%;
+      }
+
+      h1 {
+         grid-area: h1;
+         text-align: center;
+         background-color: lightgray;
+         border-radius: 4px;
+      }
+
+      #scroll-wrapper {
+         overflow: auto;
+         display: flex;
+         flex-direction: column-reverse;
+         height: 60vh;
+         grid-area: scroll-wrapper;
+      }
+
+      #output {
+         grid-area: output;
+         width: 100%;
+         border: none;
+         padding: 0;
+         font-size: 30px;
+         margin: 10px 0px;
+         border-radius: 4px;
+      }
+
+      #send {
+         grid-area: send;
+         background-color: lightgray;
+         color: black;
+         border: none;
+         font-size: 30px;
+         margin: auto;
+         width: 100%;
+         border-radius: 4px;
+      }
+
+      #send:hover {
+         background-color: white;
+         color: grey;
+      }
+
+      p {
+         margin: 10px 0px;
+         padding: 5px;
+         background-color: rgb(90, 187, 0);
+         font-size: 25px;
+         border-radius: 4px;
+         word-wrap: break-word;
+      }
+   </style>
+</body>
+
+</html>
