@@ -37,9 +37,9 @@
 
       send.addEventListener("click", () => {
          if (output.value.trim() == "") alert("Message has to have content")
-         else if (Buffer.byteLength(output.value) > 65535) alert("Messages over 64kB are not supported yet")
+         //Have to convert to blob to get the bytelength in native js
+         else if (new Blob([output.value]).size > 65535) alert("Messages over 64kB are not supported yet")
          else ws.send(output.value)
-
          output.value = ""
       })
    </script>

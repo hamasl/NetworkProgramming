@@ -22,7 +22,7 @@ net.createServer((connection) => {
 //The websocket server
 const wsServer = new WebSocketServer("localhost", 3001)
 wsServer.startServer((data) => {
-   let readData = wsServer.readv2(data)
+   let readData = wsServer.read(data)
    console.log(readData);
    if (readData !== "") wsServer.writeToAll(readData)
 })

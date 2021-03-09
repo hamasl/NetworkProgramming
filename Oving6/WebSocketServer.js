@@ -28,9 +28,10 @@ class WebSocketServer {
             }
          })
          socket.on("close", () => {
-            let closingSockets = this.sockets.splice(this.sockets.indexOf(socket))
+            let closingSockets = this.sockets.splice(this.sockets.indexOf(socket), 1)
             closingSockets.forEach(sock => sock.end())
-            console.log(`Closed connection(s): ${closingSockets.toString()}`);
+            console.log(`Closed connection(s): ${closingSockets}`);
+            console.log(closingSockets);
          })
       })
       this.server.listen(this.port, this.addresss)
@@ -87,7 +88,6 @@ class WebSocketServer {
     */
    writeToAll(message = "") {
       if (message === undefined || message === null || typeof message !== "string") return
-      this.constructReply(message)
       const contentLength = Buffer.byteLength(message)
       let contentStart = 2
       let answer = Buffer.alloc(contentLength + contentStart)
@@ -112,7 +112,6 @@ class WebSocketServer {
       console.log("writeToAll: " + answer);
       this.sockets.forEach(socket => {
          if (socket.readyState === "open") {
-            console.log(answer.toString("utf8"));
             socket.write(answer)
          }
       });

@@ -4,4 +4,4 @@ Task was to create an online compiler for any language, where a docker container
 
 To run madatory task 5 (Oving5) you need to have docker and npm installed. Packages from node also have to be installed.
 
-The server is run with the app.js file.
+The server is run with the server.js file.
